@@ -2,14 +2,25 @@
 
 A small, runnable sentiment-analysis application built with scikit-learn.
 
-## What this repo contains
+## Project structure
 
-- `app.py` - main CLI application for training, evaluating, and predicting sentiment labels from CSV files.
-- Data files you can use immediately:
-  - `traindata.csv` (id, label, text)
-  - `traindata1.csv` (label, short text)
-  - `trainset.csv`, `mobile.csv`, `posneg.csv`, `train.csv`
-- Older experimentation scripts (`sample1.py`, `svmtrain.py`, `trainclassi.py`, `test1.py`) kept for reference.
+```text
+.
+├── app.py                     # Thin entrypoint
+├── src/sentiment/             # Application package
+│   ├── cli.py
+│   ├── data.py
+│   └── model.py
+├── resources/                 # CSV datasets
+│   ├── traindata.csv
+│   ├── traindata1.csv
+│   ├── train.csv
+│   ├── trainset.csv
+│   ├── mobile.csv
+│   ├── posneg.csv
+│   └── traindata - Copy.csv
+└── archive/legacy_scripts/    # Older experimentation scripts
+```
 
 ## Requirements
 
@@ -26,20 +37,20 @@ pip install -r requirements.txt
 
 ### 1) Evaluate model quality on a dataset
 
-Using `traindata.csv` (`text` at column 2, `label` at column 1):
+Using `resources/traindata.csv` (`text` at column 2, `label` at column 1):
 
 ```bash
-python app.py --data traindata.csv --text-col 2 --label-col 1
+python app.py --data resources/traindata.csv --text-col 2 --label-col 1
 ```
 
 This runs a train/test split, prints accuracy, and a classification report.
 
 ### 2) Predict sentiment for custom text
 
-Using `traindata1.csv` (`text` at column 1, `label` at column 0):
+Using `resources/traindata1.csv` (`text` at column 1, `label` at column 0):
 
 ```bash
-python app.py --data traindata1.csv --text-col 1 --label-col 0 --predict "front camera is bad"
+python app.py --data resources/traindata1.csv --text-col 1 --label-col 0 --predict "front camera is bad"
 ```
 
 ### 3) Datasets with header rows
@@ -47,13 +58,13 @@ python app.py --data traindata1.csv --text-col 1 --label-col 0 --predict "front 
 If your CSV has a header row, add `--has-header` and set columns accordingly:
 
 ```bash
-python app.py --data train.csv --text-col 2 --label-col 0 --has-header
+python app.py --data resources/train.csv --text-col 2 --label-col 0 --has-header
 ```
 
 ## CLI options
 
 ```text
---data <path>          Path to CSV file (default: traindata.csv)
+--data <path>          Path to CSV file (default: resources/traindata.csv)
 --text-col <int>       Zero-based index of text column (default: 2)
 --label-col <int>      Zero-based index of label column (default: 1)
 --has-header           Use if first row is header
@@ -64,5 +75,5 @@ python app.py --data train.csv --text-col 2 --label-col 0 --has-header
 
 ## Notes
 
-- This app uses a simple `CountVectorizer + TF-IDF + MultinomialNB` pipeline.
-- Labels are treated as strings from the CSV (e.g., `0`/`1`).
+- The app uses a `CountVectorizer + TF-IDF + MultinomialNB` pipeline.
+- Labels are treated as strings from the CSV (for example, `0`/`1`).
